@@ -15,7 +15,7 @@ extension Color {
     public static var purpleDarkV: Color {
         return Color(red: 0.19, green: 0.17, blue: 0.36)
     }
-    public static var linearVertical: LinearGradient {
+    public static var purpleLinearVertical: LinearGradient {
         return LinearGradient(gradient: Gradient(colors: [Color.purpleDarkV, Color.purpleLightV]), startPoint: .leading, endPoint: .trailing)
     }
     public static var purpleLightH: Color {
@@ -24,7 +24,7 @@ extension Color {
     public static var purpleDarkH: Color {
         return Color(red: 0.26, green: 0.24, blue: 0.51)
     }
-    public static var linearHorizontal: LinearGradient {
+    public static var purpleLinearHorizontal: LinearGradient {
         return LinearGradient(gradient: Gradient(colors: [Color.purpleLightH, Color.purpleDarkH]), startPoint: .top, endPoint: .bottom)
     }
 }
