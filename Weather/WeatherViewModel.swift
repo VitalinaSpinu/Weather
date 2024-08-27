@@ -15,15 +15,16 @@ class WeatherViewModel: ObservableObject {
     @Published var temp: String = ""
     @Published var description: String = ""
     
+    private let apiKey: String = "4f071ac6d017b2bdfc07918768d91cb3"
+    private let url: String = "https://api.openweathermap.org/data/2.5/weather"
+    private let units: String = "metric"
+    
     init() {
-        fetchWeather()
+        fetchWeather(lat: "47.003670", lon: "28.907089")
     }
-    func fetchWeather() {
-        let url = "https://api.openweathermap.org/data/2.5/weather"
-        let apiKey:String = "4f071ac6d017b2bdfc07918768d91cb3"
-        let lat = "47.003670"
-        let lon = "28.907089"
-        let units = "metric"
+    
+    func fetchWeather(lat: String, lon: String) {
+        
         let parameters = ["lat": lat, "lon": lon, "units": units, "appid": apiKey]
         
         AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: nil, interceptor: nil)
@@ -43,7 +44,7 @@ class WeatherViewModel: ObservableObject {
                     }
                 case .failure(let error):
                     print(error)
-                }
             }
+        }
     }
 }

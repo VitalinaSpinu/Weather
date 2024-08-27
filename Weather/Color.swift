@@ -19,10 +19,10 @@ extension Color {
         return LinearGradient(gradient: Gradient(colors: [Color.purpleDarkV, Color.purpleLightV]), startPoint: .leading, endPoint: .trailing)
     }
     public static var purpleLightH: Color {
-        return Color(red: 0.42, green: 0.45, blue: 0.74)
+        return Color(red: 0.32, green: 0.35, blue: 0.54)
     }
     public static var purpleDarkH: Color {
-        return Color(red: 0.26, green: 0.24, blue: 0.51)
+        return Color(red: 0.16, green: 0.14, blue: 0.41)
     }
     public static var purpleLinearHorizontal: LinearGradient {
         return LinearGradient(gradient: Gradient(colors: [Color.purpleLightH, Color.purpleDarkH]), startPoint: .top, endPoint: .bottom)

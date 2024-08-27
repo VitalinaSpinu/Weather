@@ -11,9 +11,12 @@ struct ContentView: View {
     
     @StateObject var viewModel = WeatherViewModel()
     let fontSize = 20
+    var yOffset: CGFloat = 50
     
     var body: some View {
         VStack {
+            Spacer()
+            
             VStack(spacing: 10) {
                 Text("Chișinǎu")
                     .font(.system(size: 34) .weight(.regular))
@@ -26,22 +29,24 @@ struct ContentView: View {
                     .font(.system(size: CGFloat(fontSize)) .weight(.bold))
                     .foregroundStyle(.gray)
             }
+
             HStack {
-                Spacer()
                 Text("H: \(viewModel.tempMax)°")
                     .font(.system(size: CGFloat(fontSize)) .weight(.bold))
                     .foregroundStyle(.white)
                 Text("L: \(viewModel.tempMin)°")
                     .font(.system(size: CGFloat(fontSize)) .weight(.bold))
                     .foregroundStyle(.white)
-                Spacer()
             }
+            
             VStack {
                 Image("House")
                     .resizable()
                     .scaledToFit()
             }
-        }
+            Spacer()
+        }.ignoresSafeArea()
+        
         .background {
             Image("Background")
                 .resizable()
