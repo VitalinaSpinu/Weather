@@ -44,6 +44,29 @@ struct ContentView: View {
                     .scaledToFit()
             }
             Spacer()
+            ZStack {
+                RectangleTabBar()
+                ZStack {
+                    ArcTabBar()
+                    HStack {
+                        Button {
+                        } label: {
+                            Image(systemName: "mappin.and.ellipse")
+                                .foregroundStyle(.white)
+                                .font(.system(size: 28))
+                        }
+                        Spacer()
+                        Button {
+                        } label: {
+                            Image(systemName: "list.star")
+                                .foregroundStyle(.white)
+                                .font(.system(size: 28))
+                            
+                        }
+                    }.padding(.horizontal, 50)
+                }
+                
+            }.frame(height: 100)
             
         }.ignoresSafeArea()
         
@@ -54,4 +77,56 @@ struct ContentView: View {
                     .ignoresSafeArea()
             }
     }
+}
+struct RectangleTabBar: View {
+    
+    var body: some View {
+        let path = Path { path in
+            path.move(to: .zero)
+            path.addCurve(to: CGPoint(x: 440, y: -10),
+                control1: CGPoint(x: 130, y: 45),
+                control2: CGPoint(x: 300, y: 45))
+            path.addLine(to: CGPoint(x: 440, y: 110))
+            path.addLine(to: CGPoint(x: -10, y: 110))
+            path.closeSubpath()
+        }
+        path.fill(Color.purpleLinearVertical).overlay(path.stroke(Color.white, lineWidth: 0.5))
+    }
+}
+
+struct ArcTabBar: View {
+    
+    var body: some View {
+        
+        VStack {
+            
+            let path = Path { path in
+                
+                let width = 430
+                let halfWidth = width / 2
+                let height = 100
+                let transitionX = 90
+                let startPointY = 100
+                let controlPointYBottom = 75
+                let controlPointYTop = 0
+                let topLine = 54
+                let curveDistance = 75
+                
+                path.move(to: CGPoint(x: transitionX, y: startPointY)) // Start point
+                path.addCurve(to: CGPoint(x: halfWidth - topLine / 2, y: .zero),
+                    control1: CGPoint(x: transitionX + curveDistance, y: controlPointYBottom),
+                    control2: CGPoint(x: halfWidth - curveDistance, y: controlPointYTop)
+                )
+                path.addLine(to: CGPoint(x: halfWidth + topLine / 2, y: .zero)) // Middle line
+                path.addCurve(to: CGPoint(x: width - transitionX, y: startPointY),
+                    control1: CGPoint(x: halfWidth + curveDistance, y: controlPointYTop),
+                    control2: CGPoint(x: width - transitionX - curveDistance, y: controlPointYBottom)
+                )
+                path.closeSubpath()
+            }
+            path.fill(Color.purpleLinearHorizontal).overlay(path.stroke(Color.black, lineWidth: 1))
+        }
+        
+    }
+    
 }
