@@ -11,7 +11,6 @@ struct ContentView: View {
     
     @StateObject var viewModel = WeatherViewModel()
     let fontSize = 20
-    var yOffset: CGFloat = 50
     
     var body: some View {
         VStack {
@@ -29,7 +28,7 @@ struct ContentView: View {
                     .font(.system(size: CGFloat(fontSize)) .weight(.bold))
                     .foregroundStyle(.gray)
             }
-
+            
             HStack {
                 Text("H: \(viewModel.tempMax)°")
                     .font(.system(size: CGFloat(fontSize)) .weight(.bold))
@@ -45,13 +44,14 @@ struct ContentView: View {
                     .scaledToFit()
             }
             Spacer()
+            
         }.ignoresSafeArea()
         
-        .background {
-            Image("Background")
-                .resizable()
-                .scaledToFill()
-                .ignoresSafeArea()
-        }
+            .background {
+                Image("Background")
+                    .resizable()
+                    .scaledToFill()
+                    .ignoresSafeArea()
+            }
     }
 }
