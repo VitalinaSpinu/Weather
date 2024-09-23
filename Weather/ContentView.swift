@@ -8,14 +8,12 @@
 import SwiftUI
 
 struct ContentView: View {
-    
     @StateObject var viewModel = WeatherViewModel()
     let fontSize = 20
     
     var body: some View {
         VStack {
             Spacer()
-            
             VStack(spacing: 10) {
                 Text("Chișinǎu")
                     .font(.system(size: 34) .weight(.regular))
@@ -61,13 +59,10 @@ struct ContentView: View {
                             Image(systemName: "list.star")
                                 .foregroundStyle(.white)
                                 .font(.system(size: 28))
-                            
                         }
                     }.padding(.horizontal, 50)
                 }
-                
             }.frame(height: 100)
-            
         }.ignoresSafeArea()
         
             .background {
@@ -75,11 +70,11 @@ struct ContentView: View {
                     .resizable()
                     .scaledToFill()
                     .ignoresSafeArea()
-            }
+        }
     }
 }
+
 struct RectangleTabBar: View {
-    
     var body: some View {
         let path = Path { path in
             path.move(to: .zero)
@@ -96,12 +91,11 @@ struct RectangleTabBar: View {
 
 struct ArcTabBar: View {
     
+    @State private var isToggled = false
+    
     var body: some View {
-        
-        VStack {
-            
+        ZStack {
             let path = Path { path in
-                
                 let width = 430
                 let halfWidth = width / 2
                 let height = 100
@@ -115,18 +109,99 @@ struct ArcTabBar: View {
                 path.move(to: CGPoint(x: transitionX, y: startPointY)) // Start point
                 path.addCurve(to: CGPoint(x: halfWidth - topLine / 2, y: .zero),
                     control1: CGPoint(x: transitionX + curveDistance, y: controlPointYBottom),
-                    control2: CGPoint(x: halfWidth - curveDistance, y: controlPointYTop)
-                )
+                    control2: CGPoint(x: halfWidth - curveDistance, y: controlPointYTop))
                 path.addLine(to: CGPoint(x: halfWidth + topLine / 2, y: .zero)) // Middle line
                 path.addCurve(to: CGPoint(x: width - transitionX, y: startPointY),
                     control1: CGPoint(x: halfWidth + curveDistance, y: controlPointYTop),
-                    control2: CGPoint(x: width - transitionX - curveDistance, y: controlPointYBottom)
-                )
+                    control2: CGPoint(x: width - transitionX - curveDistance, y: controlPointYBottom))
                 path.closeSubpath()
             }
             path.fill(Color.purpleLinearHorizontal).overlay(path.stroke(Color.black, lineWidth: 1))
+            
+            ZStack {
+                Circle()
+                    .fill(Color.purpleLinearHorizontal)
+                    .frame(width: 76, height: 76)
+                    .overlay(
+                    Circle()
+                        .stroke(Color.purpleLinearHorizontal, lineWidth: 4)
+                        .blur(radius: 4)
+                        .offset(x: 2, y: 2)
+                        .mask(Circle().fill(LinearGradient(Color.white, Color.clear)))
+                    )
+                    .overlay(
+                    Circle()
+                        .stroke(Color.purpleLinearHorizontal, lineWidth: 4)
+                        .blur(radius: 4)
+                        .offset(x: -2, y: -2)
+                        .mask(Circle().fill(LinearGradient(Color.black, Color.clear))))
+                Circle()
+                    .fill(Color.purpleLinearHorizontal)
+                    .frame(width: 74, height: 74)
+                    .overlay(
+                    Circle()
+                        .stroke(Color.black, lineWidth: 6)
+                        .blur(radius: 4)
+                        .offset(x: 2, y: 2)
+                        .mask(Circle().fill(LinearGradient(Color.black, Color.clear)))
+                    )
+                    .overlay(
+                    Circle()
+                        .stroke(Color.white, lineWidth: 4)
+                        .blur(radius: 4)
+                        .offset(x: -2, y: -2)
+                        .mask(Circle().fill(LinearGradient(Color.clear, Color.black)))
+                    )
+                    .mask(Circle().fill(LinearGradient(Color.black, Color.clear)))
+                Toggle(isOn: $isToggled) {
+                    Image(systemName: "plus")
+                        .foregroundStyle(Color.purpleLinearVertical)
+                        .imageScale(.large)
+                        .font(.title2).bold()
+                }
+                .toggleStyle(TogglePlus())
+            }
         }
-        
     }
-    
+}
+struct TogglePlus: ToggleStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        Button(action: {
+            configuration.isOn.toggle()
+        }) {
+            configuration.label
+                .padding(30)
+                .contentShape(Circle())
+        }
+            .background(
+                Group {
+                    if configuration.isOn {
+                        Circle()
+                            .fill(Color.whiteOff)
+                            .frame(width: 66, height: 66)
+                            .overlay(
+                            Circle()
+                                .stroke(Color.gray, lineWidth: 6)
+                                .blur(radius: 4)
+                                .offset(x: 2, y: 2)
+                                .mask(Circle().fill(LinearGradient(Color.black, Color.clear)))
+                            )
+                            .overlay(
+                            Circle()
+                                .stroke(Color.gray, lineWidth: 6)
+                                .blur(radius: 4)
+                                .offset(x: -2, y: -2)
+                                .mask(Circle().fill(LinearGradient(Color.clear, Color.black)))
+                            )
+                    } else {
+                        Circle()
+                            .fill(Color.whiteOff)
+                            .frame(width: 66, height: 66)
+                            .shadow(color: Color.black.opacity(0.2), radius: 10, x: 10, y: 10)
+                            .shadow(color: Color.white.opacity(0.2), radius: 10, x: -5, y: -5)
+                    }
+                     
+                }
+            ).animation(nil, value: UUID())
+    }
 }

@@ -27,4 +27,13 @@ extension Color {
     public static var purpleLinearHorizontal: LinearGradient {
         return LinearGradient(gradient: Gradient(colors: [Color.purpleLightH, Color.purpleDarkH]), startPoint: .top, endPoint: .bottom)
     }
+    public static var whiteOff: Color {
+        return Color(red: 225 / 255, green: 225 / 255, blue: 235 / 255)
+    }
+}
+
+extension LinearGradient {
+    init(_ colors: Color...) {
+        self.init(gradient: Gradient(colors: colors), startPoint: .topLeading, endPoint: .bottomTrailing)
+    }
 }
