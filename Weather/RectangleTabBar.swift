@@ -26,6 +26,6 @@ struct RectangleTabBar: View {
             path.addLine(to: CGPoint(x: pointY, y: linePointY))
             path.closeSubpath()
         }
-        path.fill(Color.purpleLinearVertical).overlay(path.stroke(Color.white, lineWidth: 0.5))
+        path.fill(Color.purpleDarkRectangle.opacity(0.74)).overlay(path.stroke(Color.RectangleLineBlue, lineWidth: 0.5))
     }
 }

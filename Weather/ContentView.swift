@@ -10,7 +10,8 @@ import SwiftUI
 struct ContentView: View {
     @StateObject var viewModel = WeatherViewModel()
     let fontSizeTextWeather = 20
-    let fontSizeButtonTabBar = 28
+    let fontSizeButtonTabBar = 22
+    @State private var isToggled = false
     
     var body: some View {
         VStack {
@@ -47,6 +48,18 @@ struct ContentView: View {
                 RectangleTabBar()
                 ZStack {
                     ArcTabBar()
+//                    Button("") {
+//                        print("test")
+//                    }.buttonStyle(ButtonPlusStyle())
+//                    
+//                    Button {
+//                        
+//                    } label: {
+//                        Image(systemName: "plus")
+//                            .foregroundStyle(Color.purpleLinearVertical)
+//                            .font(.system(size: 26)).bold()
+//                    }
+                    
                     HStack {
                         Button {
                         } label: {
