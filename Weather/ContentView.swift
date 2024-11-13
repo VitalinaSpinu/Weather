@@ -11,7 +11,6 @@ struct ContentView: View {
     @StateObject var viewModel = WeatherViewModel()
     let fontSizeTextWeather = 20
     let fontSizeButtonTabBar = 22
-    @State private var isToggled = false
     
     var body: some View {
         VStack {
@@ -38,52 +37,41 @@ struct ContentView: View {
                     .foregroundStyle(.white)
             }
             
-            VStack {
+            ZStack(alignment: .bottom) {
                 Image("House")
                     .resizable()
                     .scaledToFit()
             }
-            Spacer()
-            ZStack {
-                RectangleTabBar()
+                Spacer()
                 ZStack {
-                    ArcTabBar()
-//                    Button("") {
-//                        print("test")
-//                    }.buttonStyle(ButtonPlusStyle())
-//                    
-//                    Button {
-//                        
-//                    } label: {
-//                        Image(systemName: "plus")
-//                            .foregroundStyle(Color.purpleLinearVertical)
-//                            .font(.system(size: 26)).bold()
-//                    }
-                    
-                    HStack {
-                        Button {
-                        } label: {
-                            Image(systemName: "mappin.and.ellipse")
-                                .foregroundStyle(.white)
-                                .font(.system(size: CGFloat(fontSizeButtonTabBar)))
-                        }
-                        Spacer()
-                        Button {
-                        } label: {
-                            Image(systemName: "list.star")
-                                .foregroundStyle(.white)
-                                .font(.system(size: CGFloat(fontSizeButtonTabBar)))
-                        }
-                    }.padding(.horizontal, 50)
+                    RectangleTabBar()
+                    ZStack {
+                        ArcTabBar()
+                        HStack {
+                            Button {
+                            } label: {
+                                Image(systemName: "mappin.and.ellipse")
+                                    .foregroundStyle(.white)
+                                    .font(.system(size: CGFloat(fontSizeButtonTabBar)))
+                            }
+                            Spacer()
+                            Button {
+                            } label: {
+                                Image(systemName: "list.star")
+                                    .foregroundStyle(.white)
+                                    .font(.system(size: CGFloat(fontSizeButtonTabBar)))
+                            }
+                        }.padding(.horizontal, 50)
+                    }
+                }.frame(height: 100)
+            }.ignoresSafeArea()
+            
+                .background {
+                    Image("Background")
+                        .resizable()
+                        .scaledToFill()
+                        .ignoresSafeArea()
                 }
-            }.frame(height: 100)
-        }.ignoresSafeArea()
-        
-            .background {
-                Image("Background")
-                    .resizable()
-                    .scaledToFill()
-                    .ignoresSafeArea()
         }
     }
-}
+

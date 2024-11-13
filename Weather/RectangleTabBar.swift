@@ -20,12 +20,13 @@ struct RectangleTabBar: View {
             
             path.move(to: .zero)
             path.addCurve(to: CGPoint(x: pointX, y: pointY),
-                control1: CGPoint(x: control1PointX, y: controlPointY),
-                control2: CGPoint(x: control2PointX, y: controlPointY))
+                          control1: CGPoint(x: control1PointX, y: controlPointY),
+                          control2: CGPoint(x: control2PointX, y: controlPointY))
             path.addLine(to: CGPoint(x: pointX, y: linePointY))
             path.addLine(to: CGPoint(x: pointY, y: linePointY))
             path.closeSubpath()
         }
-        path.fill(Color.purpleDarkRectangle.opacity(0.74)).overlay(path.stroke(Color.RectangleLineBlue, lineWidth: 0.5))
+        path.stroke(Color.RectangleLineBlue, lineWidth: 0.7)
+        path.fill(Color.purpleDarkRectangle.opacity(0.7))
     }
 }

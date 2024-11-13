@@ -14,14 +14,14 @@ struct ArcTabBar: View {
     var body: some View {
         ZStack {
             let path = Path { path in
-                let width = 430
+                let width = 405
                 let halfWidth = width / 2
                 let height = 100
-                let transitionX = 95
+                let transitionX = 90
                 let startPointY = 100
                 let controlPointYBottom = 70
                 let controlPointYTop = 0
-                let topLine = 46
+                let topLine = 34
                 let curveDistance = 75
                 
                 path.move(to: CGPoint(x: transitionX, y: startPointY)) // Start point
