@@ -10,7 +10,6 @@ import SwiftUI
 struct ArcTabBar: View {
     
     let innerShadowsCircle: CGFloat = 64
-    let varssvb = 2
 
     var body: some View {
         ZStack {
