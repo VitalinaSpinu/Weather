@@ -9,22 +9,18 @@ import Foundation
 import SwiftUI
 
 extension Color {
-    public static var purpleLightV: Color {
-        return Color(red: 0.28, green: 0.19, blue: 0.62)
+    public static var purpleDarkRectangle: Color {
+        return Color(red: 0.18, green: 0.1, blue: 0.42)
     }
-    public static var purpleDarkV: Color {
-        return Color(red: 0.19, green: 0.17, blue: 0.36)
+    public static var purpleDarkArc: Color {
+        return Color(red: 0.18, green: 0.18, blue: 0.39)
     }
-    public static var purpleLinearVertical: LinearGradient {
-        return LinearGradient(gradient: Gradient(colors: [Color.purpleDarkV, Color.purpleLightV]), startPoint: .leading, endPoint: .trailing)
+    public static var RectangleLineBlue: Color {
+        return Color(red: 0.45, green: 0.50, blue: 0.95)
     }
-    public static var purpleLightH: Color {
-        return Color(red: 0.32, green: 0.35, blue: 0.54)
-    }
-    public static var purpleDarkH: Color {
-        return Color(red: 0.16, green: 0.14, blue: 0.41)
-    }
-    public static var purpleLinearHorizontal: LinearGradient {
-        return LinearGradient(gradient: Gradient(colors: [Color.purpleLightH, Color.purpleDarkH]), startPoint: .top, endPoint: .bottom)
+}
+extension LinearGradient {
+    init(_ colors: Color...) {
+        self.init(gradient: Gradient(colors: colors), startPoint: .topLeading, endPoint: .bottomTrailing)
     }
 }
