@@ -18,6 +18,9 @@ extension Color {
     public static var RectangleLineBlue: Color {
         return Color(red: 0.45, green: 0.50, blue: 0.95)
     }
+    public static var purplelight: Color {
+            return Color(red: 0.282, green: 0.192, blue: 0.616)
+        }
 }
 extension LinearGradient {
     init(_ colors: Color...) {
