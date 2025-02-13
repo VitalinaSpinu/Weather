@@ -42,6 +42,9 @@ struct ContentView: View {
                             .foregroundStyle(.white)
                     }
                 }
+                .onAppear {
+                    viewModel.loadWeather(lat: "47.003670", lon: "28.907089")
+                }
                 
                 ZStack {
                     Image("House")

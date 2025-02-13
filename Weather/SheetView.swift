@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SheetView: View {
-    @StateObject private var viewModel = WeatherViewModel()
+    @ObservedObject private var viewModel = WeatherViewModel()
     var iconWeatherDescription: String
     @State private var isFlagged = false
     @State private var selectedTab: Int = 0
@@ -57,17 +57,17 @@ struct SheetView: View {
                     .fill(
                         LinearGradient(
                             gradient: Gradient(colors: [
-                                Color.white.opacity(0), // Marginea stângă spălăcită
-                                Color.purple.opacity(0.7), // Mijlocul aprins
-                                Color.white.opacity(0)  // Marginea dreaptă spălăcită
+                                Color.white.opacity(0),
+                                Color.purple.opacity(0.7),
+                                Color.white.opacity(0) 
                             ]),
                             startPoint: .leading,
                             endPoint: .trailing
                         )
                     )
-                    .frame(width: 150, height: 3) // Dimensiunea liniei
-                    .shadow(color: Color.white.opacity(0.6), radius: 3, x: 3, y: 0) // Efect de iluminare
-                    .offset(x: selectedTab == 0 ? -120 : 120) // Poziția animată a liniei
+                    .frame(width: 150, height: 3)
+                    .shadow(color: Color.white.opacity(0.6), radius: 3, x: 3, y: 0)
+                    .offset(x: selectedTab == 0 ? -120 : 120)
                     .animation(.easeInOut, value: selectedTab)
                 
                 
@@ -104,12 +104,15 @@ struct SheetView: View {
                                     .foregroundStyle(.white)
                             }
                             .frame(width: 60, height: 146)
-                            .background(forecast.dateDay == viewModel.forecastTempsDay.first?.dateDay ? Color.purplelight : Color.purpleDarkRectangle)
-                            .cornerRadius(50)
-                            .shadow(color: Color.black.opacity(0.4), radius: 10, x: 5, y: 4)
+                            .background(forecast.dateDay == viewModel.forecastTempsDay.first?.dateDay ? Color.purplelight.opacity(0.8) : Color.purpleDarkRectangle.opacity(0.3))
+                            .cornerRadius(30)
+                            .shadow(color: Color.black.opacity(0.8), radius: 10, x: 5, y: 4)
                             .overlay(
-                                RoundedRectangle(cornerRadius: 50)
-                                    .stroke(Color.RectangleLineBlue, lineWidth: 0.3)
+                                RoundedRectangle(cornerRadius: 30)
+                                    .stroke(Color.white.opacity(0.5), lineWidth: 1)
+                                    .shadow(color: Color.white.opacity(0.9), radius: 0, x: 1, y: 1)
+                                    .blendMode(.overlay)
+                                    .clipShape(RoundedRectangle(cornerRadius: 30))
                             )
                         }
                     } else {

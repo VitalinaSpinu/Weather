@@ -8,17 +8,17 @@
 import SwiftUI
 
 struct WeatherModel: Codable {
-    let main: Main
-    let weather: [Weather]
+    let main: MainWeather
+    let weather: [WeatherDescription]
 }
 
-struct Main: Codable {
-    let temp_max: Double
-    let temp_min: Double
+struct MainWeather: Codable {
     let temp: Double
+    let temp_min: Double
+    let temp_max: Double
 }
 
-struct Weather: Codable {
+struct WeatherDescription: Codable {
     let description: String
 }
 

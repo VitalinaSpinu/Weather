@@ -7,74 +7,76 @@
 
 import SwiftUI
 import Alamofire
+import Combine
+
+protocol WeatherServiceProtocol {
+    func fetchWeather(lat: String, lon: String) -> AnyPublisher<WeatherModel, Error>
+}
 
 class WeatherViewModel: ObservableObject {
-    
     @Published var tempMax: String = ""
     @Published var tempMin: String = ""
     @Published var temp: String = ""
     @Published var description: String = ""
     @Published var forecastTempsDay: [WeatherForecastDataDay] = []
     @Published var forecastTempsHour: [WeatherForecastDataHour] = []
+    @Published var errorMessage: String?
+    
+    private var cancellables = Set<AnyCancellable>()
+    private let weatherService: WeatherServiceProtocol
     
     private let apiKey: String = "840628f87cbb3df8ea739e55ab09d2eb"
     private let urlForecast: String = "https://api.openweathermap.org/data/2.5/forecast"
     private let urlWeather: String = "https://api.openweathermap.org/data/2.5/weather"
     private let units: String = "metric"
     
-    init() {
-        fetchWeather(lat: "47.003670", lon: "28.907089", url: urlWeather)
+    init(weatherService: WeatherServiceProtocol = WeatherService()) {
+        self.weatherService = weatherService
         fetchForecast(lat: "47.003670", lon: "28.907089", url: urlForecast)
     }
     
-    func fetchWeather(lat: String, lon: String, url: String) {
-        let parameters = ["lat": lat, "lon": lon, "units": units, "appid": apiKey]
-        
-        AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: nil, interceptor: nil)
-            .response { resp in
-                switch resp.result {
-                case .success(let data):
-                    do {
-                        let jsonData = try JSONDecoder().decode(WeatherModel.self, from: data!)
-                        DispatchQueue.main.async {
-                            self.tempMax = "\(Int(jsonData.main.temp_max))"
-                            self.tempMin = "\(Int(jsonData.main.temp_min))"
-                            self.temp = "\(Int(jsonData.main.temp))"
-                            self.description = jsonData.weather.first?.description ?? "No Description"
-                        }
-                    } catch {
-                        print(error)
-                    }
+    func loadWeather(lat: String, lon: String) {
+        weatherService.fetchWeather(lat: lat, lon: lon)
+            .sink(receiveCompletion: { completion in
+                switch completion {
                 case .failure(let error):
-                    print(error)
+                    self.errorMessage = error.localizedDescription
+                case .finished:
+                    break
                 }
-            }
+            }, receiveValue: { weatherData in
+                self.tempMax = "\(Int(weatherData.main.temp_max))"
+                self.tempMin = "\(Int(weatherData.main.temp_min))"
+                self.temp = "\(Int(weatherData.main.temp))"
+                self.description = weatherData.weather.first?.description ?? "No Description"
+            })
+            .store(in: &cancellables)
     }
     
     func weatherIcon(for description: String) -> String {
         switch description.lowercased() {
         case "clear sky":
-            return "sun.max.fill" // Cer senin
+            return "sun.max.fill"
         case "few clouds":
-            return "cloud.sun.fill" // Câteva nori
+            return "cloud.sun.fill"
         case "scattered clouds":
-            return "cloud.fill" // Nori risipiți
+            return "cloud.fill"
         case "broken clouds":
-            return "cloud.heavyrain.fill" // Nori înfrânți
+            return "cloud.heavyrain.fill"
         case "overcast clouds":
-            return "cloud.fill" // Cer acoperit de nori
+            return "cloud.fill"
         case "light rain", "moderate rain", "heavy rain", "very heavy rain", "extreme rain":
-            return "cloud.rain.fill" // Ploaie
+            return "cloud.rain.fill"
         case "light snow", "snow", "heavy snow":
-            return "snowflake" // Zăpadă
+            return "snowflake"
         case "thunderstorm":
-            return "cloud.bolt.rain.fill" // Furtună
+            return "cloud.bolt.rain.fill"
         case "mist", "haze", "fog":
-            return "cloud.fog.fill" // Ceață
+            return "cloud.fog.fill"
         case "dust", "sand", "sand, dust whirls":
-            return "wind" // Vânt cu praf sau nisip
+            return "wind"
         default:
-            return "questionmark.circle" // Dacă nu este recunoscută descrierea, folosim un simbol de întrebarea
+            return "questionmark.circle"
         }
     }
     
@@ -91,14 +93,13 @@ class WeatherViewModel: ObservableObject {
                 
                 return WeatherForecastDataDay(dateDay: dayOfWeek, description: description, temp: temp, icon: icon, pop: pop)
             }
-        // Set pentru a urmări zilele deja procesate și pentru a elimina duplicatele
-        var seenDays = Set<String>() // Set pentru a urmări zilele deja procesate
+        
+        var seenDays = Set<String>()
         let uniqueForecasts = processedForecasts.filter { forecast in
-            // Dacă ziua nu a fost deja procesată, o adăugăm
             if seenDays.contains(forecast.dateDay) {
-                return false // Dacă ziua există deja, o excludem
+                return false
             } else {
-                seenDays.insert(forecast.dateDay) // Adăugăm ziua în set
+                seenDays.insert(forecast.dateDay)
                 return true
             }
         }
@@ -107,19 +108,19 @@ class WeatherViewModel: ObservableObject {
     
     func icon(for weatherIcon: String) -> String {
         switch weatherIcon {
-        case "01d": return "sun.max.fill"          // Cer senin zi
-        case "01n": return "moon.fill"            // Cer senin noapte
-        case "02d": return "cloud.sun.fill"       // Parțial noros zi
-        case "02n": return "cloud.moon.fill"      // Parțial noros noapte
-        case "03d", "03n": return "cloud.fill"    // Noros
-        case "04d", "04n": return "smoke.fill"    // Cer complet acoperit de nori
-        case "09d", "09n": return "cloud.drizzle.fill" // Ploaie măruntă
-        case "10d": return "cloud.sun.rain.fill"  // Ploaie zi
-        case "10n": return "cloud.moon.rain.fill" // Ploaie noapte
-        case "11d", "11n": return "cloud.bolt.fill" // Furtună
-        case "13d", "13n": return "snow"          // Zăpadă
-        case "50d", "50n": return "cloud.fog.fill" // Ceață
-        default: return "questionmark.circle"     // Cod necunoscut
+        case "01d": return "sun.max.fill"
+        case "01n": return "moon.fill"
+        case "02d": return "cloud.sun.fill"
+        case "02n": return "cloud.moon.fill"
+        case "03d", "03n": return "cloud.fill"
+        case "04d", "04n": return "smoke.fill"
+        case "09d", "09n": return "cloud.drizzle.fill"
+        case "10d": return "cloud.sun.rain.fill"
+        case "10n": return "cloud.moon.rain.fill"
+        case "11d", "11n": return "cloud.bolt.fill"
+        case "13d", "13n": return "snow"
+        case "50d", "50n": return "cloud.fog.fill"
+        default: return "questionmark.circle"
         }
     }
     
@@ -139,10 +140,10 @@ class WeatherViewModel: ObservableObject {
             }
         return processedForecasts
     }
-
+    
     func fetchForecast(lat: String, lon: String, url: String) {
         let parameters = ["lat": lat, "lon": lon, "units": units, "appid": apiKey]
-    
+        
         AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: nil, interceptor: nil)
             .response { resp in
                 switch resp.result {
@@ -159,7 +160,7 @@ class WeatherViewModel: ObservableObject {
                 case .failure(let error):
                     print(error)
                 }
-        }
+            }
     }
     
     private func dayOfWeek(from dateDay: Date) -> String {
