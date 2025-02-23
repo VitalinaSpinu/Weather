@@ -10,33 +10,33 @@ import SwiftUI
 struct ArcTabBar: View {
     
     let innerShadowsCircle: CGFloat = 64
+    @State private var isShow = false
 
     var body: some View {
-        ZStack {
+        ZStack(alignment: .center) {
             let path = Path { path in
-                let width = 405
+                let width = UIScreen.main.bounds.width
                 let halfWidth = width / 2
-                let height = 100
                 let transitionX = 90
                 let startPointY = 100
                 let controlPointYBottom = 70
                 let controlPointYTop = 0
-                let topLine = 34
+                let topLine = 34 / 2
                 let curveDistance = 75
-                
+            
                 path.move(to: CGPoint(x: transitionX, y: startPointY)) // Start point
-                path.addCurve(to: CGPoint(x: halfWidth - topLine / 2, y: .zero),
+                path.addCurve(to: CGPoint(x: Int(halfWidth) - topLine, y: .zero),
                               control1: CGPoint(x: transitionX + curveDistance, y: controlPointYBottom),
-                              control2: CGPoint(x: halfWidth - curveDistance, y: controlPointYTop))
-                path.addLine(to: CGPoint(x: halfWidth + topLine / 2, y: .zero)) // Middle line
-                path.addCurve(to: CGPoint(x: width - transitionX, y: startPointY),
-                              control1: CGPoint(x: halfWidth + curveDistance, y: controlPointYTop),
-                              control2: CGPoint(x: width - transitionX - curveDistance, y: controlPointYBottom))
+                              control2: CGPoint(x: Int(halfWidth) - curveDistance, y: controlPointYTop))
+                path.addLine(to: CGPoint(x: Int(halfWidth) + topLine, y: .zero)) // Middle line
+                path.addCurve(to: CGPoint(x: Int(width) - transitionX, y: startPointY),
+                              control1: CGPoint(x: Int(halfWidth) + curveDistance, y: controlPointYTop),
+                              control2: CGPoint(x: Int(width) - transitionX - curveDistance, y: controlPointYBottom))
                 path.closeSubpath()
             }
             path.fill(Color.purpleDarkArc).overlay(path.stroke(Color.black, lineWidth: 1))
             
-            ZStack {
+            ZStack(alignment: .center) {
                 Circle()
                     .fill(Color.purpleDarkArc)
                     .frame(width: innerShadowsCircle, height: innerShadowsCircle)
